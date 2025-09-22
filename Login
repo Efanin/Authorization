@@ -1,0 +1,30 @@
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Login(User user)
+{
+    var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.Email),
+        new Claim(ClaimTypes.NameIdentifier, user.Password)
+    };
+    var claimsIdentity = new ClaimsIdentity(
+        claims, CookieAuthenticationDefaults.AuthenticationScheme);
+    var authProperties = new AuthenticationProperties
+    {
+        IsPersistent = user.RememberMe,
+        ExpiresUtc = user.RememberMe ?
+            DateTimeOffset.UtcNow.AddDays(1) :
+            DateTimeOffset.UtcNow.AddMinutes(30)
+    };
+    HttpContext.SignInAsync(
+        CookieAuthenticationDefaults.AuthenticationScheme,
+        new ClaimsPrincipal(claimsIdentity),
+        authProperties);
+    return View("Index");
+}
+
+public IActionResult Logout()
+{
+    HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    return View("Index");
+}
