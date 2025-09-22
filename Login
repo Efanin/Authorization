@@ -1,6 +1,6 @@
 [HttpPost]
 [ValidateAntiForgeryToken]
-public IActionResult Login(User user)
+public async Task<IActionResult> Login(User user)
 {
     var claims = new List<Claim>
     {
@@ -16,15 +16,15 @@ public IActionResult Login(User user)
             DateTimeOffset.UtcNow.AddDays(1) :
             DateTimeOffset.UtcNow.AddMinutes(30)
     };
-    HttpContext.SignInAsync(
+    await HttpContext.SignInAsync(
         CookieAuthenticationDefaults.AuthenticationScheme,
         new ClaimsPrincipal(claimsIdentity),
         authProperties);
-    return View("Index");
+    return RedirectToAction("Index", "Home");
 }
 
-public IActionResult Logout()
+public async Task<IActionResult> Logout()
 {
-    HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    return View("Index");
+    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    return RedirectToAction("Index", "Home");
 }
