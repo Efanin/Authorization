@@ -1,0 +1,7 @@
+var stream = new MemoryStream(filedb);
+IFormFile file = new FormFile(stream, 0, filedb.Length, FileName, FileName);
+string savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/file", file.FileName);
+using (var stream1 = new FileStream(savePath, FileMode.Create))
+{
+    file.CopyTo(stream1);
+}
