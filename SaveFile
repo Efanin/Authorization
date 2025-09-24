@@ -1,0 +1,13 @@
+[HttpPost]
+public async Task<IActionResult> Add(IFormFile file)
+{
+    if (file != null)
+    {              
+        string savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/file", file.FileName);
+        using (var stream = new FileStream(savePath, FileMode.Create))
+        {
+            file.CopyTo(stream);
+        }
+    }
+    return View("Privacy");
+}
