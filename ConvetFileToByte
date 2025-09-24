@@ -1,0 +1,3 @@
+using var memoryStream = new MemoryStream();
+file.CopyTo(memoryStream);
+byte[] filedb = memoryStream.ToArray();
